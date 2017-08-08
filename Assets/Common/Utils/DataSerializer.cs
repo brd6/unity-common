@@ -7,12 +7,6 @@ using UnityEngine;
 
 namespace Common
 {
-    public enum DataSerializeType
-    {
-        BINARY,
-        XML
-    }
-
     public class DataSerializer
     {
         /// <summary>
@@ -50,6 +44,12 @@ namespace Common
             return data;
         }
 
+        /// <summary>
+        /// Save data to binary file
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="data"></param>
+        /// <param name="filename"></param>
         public static void SaveBinary<T>(T data, string filename)
         {
             BinaryFormatter binaryFormatter = new BinaryFormatter();
@@ -59,6 +59,12 @@ namespace Common
             fileStream.Close();
         }
 
+        /// <summary>
+        /// Load data from binary file
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="filename"></param>
+        /// <returns></returns>
         public static T LoadBinary<T>(string filename)
         {
             if (!File.Exists(filename))
