@@ -7,8 +7,80 @@ using UnityEngine;
 
 namespace Common
 {
+    public enum DataSerializeType
+    {
+        BINARY,
+        XML,
+        JSON
+    }
+
     public class DataSerializer
     {
+        /// <summary>
+        /// Save data to a file format
+        /// </summary>
+        /// <typeparam name="T">Data template type</typeparam>
+        /// <param name="type">Data type</param>
+        /// <param name="data">Data</param>
+        /// <param name="filename">File path to save the data. e.g : Application.persistentDataPath + "/myfile"</param>
+        public static void SaveData<T>(DataSerializeType type, T data, string filename)
+        {
+            switch (type)
+            {
+                case DataSerializeType.BINARY:
+                    SaveBinary<T>(data, filename);
+                    break;
+                case DataSerializeType.XML:
+                    SaveXML<T>(data, filename);
+                    break;
+                case DataSerializeType.JSON:
+                    SaveJson<T>(data, filename);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Load a data from file format
+        /// </summary>
+        /// <typeparam name="T">Data template type</typeparam>
+        /// <param name="type">Data type</param>
+        /// <param name="filename">File path to load the data, e.g : Application.persistentDataPath + "/myfile"</param>
+        /// <returns></returns>
+        public static T LoadData<T>(DataSerializeType type, string filename)
+        {
+            switch (type)
+            {
+                case DataSerializeType.BINARY:
+                    return LoadBinary<T>(filename);
+                case DataSerializeType.XML:
+                    return LoadXML<T>(filename);
+                case DataSerializeType.JSON:
+                    return LoadJson<T>(filename);
+                default:
+                    break;
+            }
+
+            return default(T);
+        }
+
+        public static void SaveJson<T>(T data, string filename)
+        {
+            string jsonData = JsonUtility.ToJson(data);
+
+            File.WriteAllText(filename, jsonData);
+        }
+
+        public static T LoadJson<T>(string filename)
+        {
+            string jsonData = File.ReadAllText(filename);
+
+            T data = JsonUtility.FromJson<T>(jsonData);
+
+            return data;
+        }
+
         /// <summary>
         /// Save data to XML file
         /// </summary>
